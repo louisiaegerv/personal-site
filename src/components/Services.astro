@@ -1,0 +1,101 @@
+---
+const services = [
+  {
+    title: "Understand Your Business",
+    description:
+      "We start by digging into what's actually happening — where you're losing customers, wasting time, or leaving money on the table.",
+    icon: "M4 5h16v14H4V5Zm3 3.5 2 2-2 2m4 0h4",
+  },
+  {
+    title: "Build Your Plan",
+    description:
+      "No templates or one-size-fits-all playbooks. Just a strategy built around your business, your goals, and your constraints.",
+    icon: "M4 19V5m5 14V9m5 10V13m5 6V7",
+  },
+  {
+    title: "Get Results",
+    description:
+      "Then we execute — and keep refining until the numbers move. Growth you can see, not just promises.",
+    icon: "M13 2 4 14h6l-1 8 9-12h-6l1-8Z",
+  },
+];
+---
+
+<section id="services" class="bg-light py-20 lg:py-28">
+  <div class="mx-auto max-w-7xl px-6 lg:px-10">
+    <div class="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-end">
+      <div data-reveal>
+        <p class="text-xs font-semibold tracking-[0.3em] text-muted">
+          HOW IT WORKS
+        </p>
+        <h2
+          class="mt-4 text-3xl font-extrabold text-ink sm:text-4xl lg:text-5xl"
+        >
+          Understand. Plan. Deliver.
+        </h2>
+      </div>
+      <p data-reveal class="text-base text-muted lg:text-lg">
+        Growth doesn't come from guessing. It comes from knowing exactly what's
+        holding your business back — and having a plan built specifically to fix
+        it.
+      </p>
+    </div>
+
+    <div class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3">
+      {
+        services.map((service) => (
+          <div
+            data-reveal
+            class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-black/5"
+          >
+            <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/20 text-ink">
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d={service.icon}
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+            <h3 class="mt-5 text-xl font-bold text-ink">{service.title}</h3>
+            <p class="mt-3 text-sm text-muted">{service.description}</p>
+            <a
+              href="#contact"
+              class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-ink underline decoration-accent decoration-2 underline-offset-4 transition-colors hover:text-accent-dark"
+            >
+              Get Started
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 16 16"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M3.5 8h9m0 0L8.5 4m4 4-4 4"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  import { revealOnScroll } from "../scripts/reveal";
+  revealOnScroll("#services [data-reveal]");
+</script>

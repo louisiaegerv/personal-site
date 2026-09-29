@@ -1,0 +1,71 @@
+---
+const stats = [
+  { value: "$2M+", label: "Generated For Clients" },
+  { value: "100+", label: "Businesses Helped" },
+  { value: "100%", label: "Tailored To Your Business" },
+];
+---
+
+<section id="about" class="bg-dark py-20 lg:py-28">
+  <div
+    class="mx-auto grid max-w-7xl grid-cols-1 gap-14 px-6 lg:grid-cols-2 lg:gap-16 lg:px-10"
+  >
+    <div data-reveal>
+      <p class="text-xs font-semibold tracking-[0.3em] text-white/50">
+        WHY IT WORKS
+      </p>
+      <h2
+        class="mt-4 text-3xl font-extrabold leading-tight sm:text-4xl lg:text-5xl"
+      >
+        Real Strategy. <span class="text-accent">Real Results.</span>
+      </h2>
+      <p class="mt-6 max-w-lg text-base text-white/70 sm:text-lg">
+        Behind every stalled business is a fixable problem — a leak in the
+        funnel, a process that doesn't scale, a plan that never existed. With a
+        background built on solving exactly these problems, I've helped hundreds
+        of companies find their bottleneck and turn it into measurable growth.
+      </p>
+      <a
+        href="#contact"
+        class="mt-8 inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3.5 text-sm font-semibold text-dark transition-transform hover:scale-105"
+      >
+        Let's Build Your Plan
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M3.5 8h9m0 0L8.5 4m4 4-4 4"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </a>
+    </div>
+
+    <div
+      data-reveal
+      class="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:content-center"
+    >
+      {
+        stats.map((stat) => (
+          <div class="rounded-2xl border border-dark-border bg-dark-card px-6 py-8 text-center">
+            <p class="text-4xl font-extrabold text-accent sm:text-5xl">
+              {stat.value}
+            </p>
+            <p class="mt-2 text-sm font-medium text-white/70">{stat.label}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  import { revealOnScroll } from "../scripts/reveal";
+  revealOnScroll("#about [data-reveal]");
+</script>

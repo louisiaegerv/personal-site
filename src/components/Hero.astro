@@ -1,0 +1,119 @@
+---
+import { Image } from "astro:assets";
+import headshot from "../assets/louis-headshot.webp";
+import buildGrowScale from "../assets/build-grow-scale.webp";
+import signature from "../assets/louis-iaeger-signature.webp";
+
+const features = [
+  {
+    label: "Uncover the Real Problem",
+    icon: "M4 5h16v14H4V5Zm3 3.5 2 2-2 2m4 0h4",
+  },
+  {
+    label: "Build a Plan That Fits",
+    icon: "M4 19V5m5 14V9m5 10V13m5 6V7",
+  },
+  {
+    label: "Deliver Results That Compound",
+    icon: "M8 14a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm8 6c0-3-2.5-5-4-5m-8 5c0-3 2.5-5 4-5",
+  },
+];
+---
+
+<section
+  id="top"
+  class="relative overflow-hidden bg-dark pt-14 lg:min-h-[480px] xl:min-h-[680px] lg:pt-16"
+>
+  <div
+    class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_75%_30%,rgba(203,255,192,0.60),transparent_55%)]"
+  >
+  </div>
+
+  <div
+    id="hero-content"
+    class="relative lg:absolute mx-auto max-w-[108rem] px-6 pb-16 lg:px-10 lg:pb-0 lg:top-1/2 lg:translate-y-[-50%] w-full left-[50%] translate-x-[-50%]"
+  >
+    <p data-reveal class="text-xs font-semibold tracking-[0.3em] text-white/60">
+      GROWTH <span class="text-accent">CONSULTANT</span>
+    </p>
+
+    <h1
+      data-reveal
+      class="mt-5 text-5xl font-extrabold leading-[1.1] lg:text-[3rem] 2lg:text-[3rem] 2xl:text-[5rem]"
+    >
+      Hi, I'm <span class="text-accent">Louis Iaeger.</span>
+    </h1>
+
+    <p
+      data-reveal
+      class="mt-6 text-base text-white/70 sm:text-lg md:text-xl lg:text-xl xl:text-2xl 2xl:text-3xl max-w-[30rem] 2xl:max-w-[42rem]"
+    >
+      Every business has a bottleneck quietly capping its growth. Let's find
+      yours — and turn it into your biggest advantage.
+    </p>
+
+    <div data-reveal class="mt-8 flex flex-wrap items-center gap-4">
+      <a
+        href="#contact"
+        class="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3.5 text-sm lg:text-xl font-semibold text-dark transition-transform hover:scale-105"
+      >
+        Let's Work Together
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M3.5 8h9m0 0L8.5 4m4 4-4 4"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <div
+    data-reveal
+    class="relative mx-auto w-full max-w-sm px-10 lg:absolute lg:right-[5%] lg:bottom-0 lg:mx-0 lg:mt-0 lg:flex lg:w-[600px] xl:w-[800px] lg:max-w-none lg:items-end lg:px-0"
+  >
+    <div
+      aria-hidden="true"
+      class="absolute left-[-30%] top-[10%] z-0 aspect-square w-[150%] rounded-lg bg-[radial-gradient(circle,rgba(203,255,102,0.75)_0%,rgba(203,255,62,0.12)_35%,transparent_70%)] blur-2xl"
+    >
+    </div>
+
+    <Image
+      src={buildGrowScale}
+      alt=""
+      aria-hidden="true"
+      class="pointer-events-none absolute right-[-2%] top-[3%] z-0 w-[52%] max-w-none select-none opacity-[0.08]"
+      widths={[300, 500, 700]}
+      sizes="(min-width: 1024px) 18rem, 12rem"
+    />
+
+    <Image
+      src={headshot}
+      alt="Louis Iaeger"
+      class="relative left-[-50px] xl:left-[-150px]"
+      widths={[400, 600, 800]}
+      sizes="(min-width: 1024px) 36rem, 24rem"
+    />
+
+    <Image
+      src={signature}
+      alt="Louis Iaeger signature"
+      class="pointer-events-none absolute bottom-[19%] right-[6%] z-20 w-[28%] max-w-none select-none"
+      widths={[200, 350, 500]}
+      sizes="(min-width: 1024px) 10rem, 8rem"
+    />
+  </div>
+</section>
+
+<script>
+  import { revealNow } from "../scripts/reveal";
+  revealNow("#top [data-reveal]");
+</script>
