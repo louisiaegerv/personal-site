@@ -58,7 +58,7 @@ const links = [
     <button
       id="menu-toggle"
       type="button"
-      class="inline-flex items-center justify-center rounded-md p-2 text-white md:hidden"
+      class="relative z-10 inline-flex items-center justify-center rounded-md p-2 text-white md:hidden"
       aria-label="Toggle menu"
       aria-expanded="false"
       aria-controls="mobile-menu"
@@ -94,56 +94,81 @@ const links = [
       </svg>
     </button>
   </nav>
-
-  <div id="mobile-menu" class="hidden border-t border-dark-border md:hidden">
-    <ul class="flex flex-col gap-1 px-6 py-4">
-      {
-        links.map((link) => (
-          <li>
-            <a
-              href={link.href}
-              class="mobile-link block rounded-md px-2 py-3 text-base font-medium text-white/85 hover:bg-white/5 hover:text-accent"
-            >
-              {link.label}
-            </a>
-          </li>
-        ))
-      }
-      <li class="pt-2">
-        <a
-          href="#contact"
-          class="mobile-link flex items-center justify-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-dark"
-        >
-          Let's Talk
-        </a>
-      </li>
-    </ul>
-  </div>
 </header>
+
+<div
+  id="mobile-backdrop"
+  class="fixed inset-0 z-40 bg-black/60 opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out md:hidden"
+>
+</div>
+
+<div
+  id="mobile-menu"
+  class="fixed inset-y-0 right-0 z-50 flex w-72 max-w-[80%] translate-x-full flex-col overflow-y-auto border-l border-dark-border bg-dark px-6 pb-6 pt-24 shadow-2xl transition-transform duration-300 ease-in-out md:hidden"
+  inert
+>
+  <ul class="flex flex-col gap-1">
+    {
+      links.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class="mobile-link block rounded-md px-2 py-3 text-base font-medium text-white/85 hover:bg-white/5 hover:text-accent"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))
+    }
+    <li class="pt-2">
+      <a
+        href="#contact"
+        class="mobile-link flex items-center justify-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-dark"
+      >
+        Let's Talk
+      </a>
+    </li>
+  </ul>
+</div>
 
 <script>
   const toggle = document.getElementById("menu-toggle");
   const menu = document.getElementById("mobile-menu");
+  const backdrop = document.getElementById("mobile-backdrop");
   const iconOpen = document.getElementById("icon-open");
   const iconClose = document.getElementById("icon-close");
 
   function closeMenu() {
-    menu?.classList.add("hidden");
+    menu?.classList.add("translate-x-full");
+    backdrop?.classList.add("opacity-0", "pointer-events-none");
+    backdrop?.classList.remove("opacity-100", "pointer-events-auto");
     iconOpen?.classList.remove("hidden");
     iconClose?.classList.add("hidden");
     toggle?.setAttribute("aria-expanded", "false");
+    menu?.setAttribute("inert", "");
+    document.body.classList.remove("overflow-hidden");
   }
 
   function openMenu() {
-    menu?.classList.remove("hidden");
+    menu?.classList.remove("translate-x-full");
+    backdrop?.classList.remove("opacity-0", "pointer-events-none");
+    backdrop?.classList.add("opacity-100", "pointer-events-auto");
     iconOpen?.classList.add("hidden");
     iconClose?.classList.remove("hidden");
     toggle?.setAttribute("aria-expanded", "true");
+    menu?.removeAttribute("inert");
+    document.body.classList.add("overflow-hidden");
   }
 
   toggle?.addEventListener("click", () => {
     const isOpen = toggle.getAttribute("aria-expanded") === "true";
     isOpen ? closeMenu() : openMenu();
+  });
+
+  backdrop?.addEventListener("click", closeMenu);
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeMenu();
   });
 
   menu?.querySelectorAll(".mobile-link").forEach((link) => {
