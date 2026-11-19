@@ -1,4 +1,6 @@
 ---
+import { BOOKING_URL } from "../data/site";
+
 const links = [
   { href: "/#about", label: "About" },
   { href: "/projects", label: "Projects" },
@@ -36,7 +38,9 @@ const links = [
     </ul>
 
     <a
-      href="/#contact"
+      href={BOOKING_URL}
+      target="_blank"
+      rel="noopener noreferrer"
       class="hidden items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-dark transition-transform hover:scale-105 md:inline-flex"
     >
       Let's Talk
@@ -123,7 +127,9 @@ const links = [
     }
     <li class="pt-2">
       <a
-        href="/#contact"
+        href={BOOKING_URL}
+        target="_blank"
+        rel="noopener noreferrer"
         class="mobile-link flex items-center justify-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-dark"
       >
         Let's Talk

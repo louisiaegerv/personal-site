@@ -1,4 +1,6 @@
 ---
+import { BOOKING_URL, EMAIL } from "../data/site";
+
 interface Props {
   heading?: string;
   subheading?: string;
@@ -8,10 +10,8 @@ interface Props {
 const {
   heading = "Ready to fix what's holding your business back?",
   subheading = "Let's find your bottleneck and build a plan that turns it into growth.",
-  cta = "Let's Talk",
+  cta = "Book a Call",
 } = Astro.props;
-
-const EMAIL = "louis.iaeger@gmail.com";
 
 const socials = [
   {
@@ -32,43 +32,46 @@ const socials = [
 ];
 ---
 
-<section id="contact" class="bg-light py-16 lg:py-20">
+<section id="contact" class="bg-light py-20 lg:py-28">
   <div
     data-reveal
-    class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-6 lg:flex-row lg:items-center lg:px-10"
+    class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-10 px-6 lg:flex-row lg:items-center lg:gap-16 lg:px-10"
   >
-    <div>
-      <h2 class="text-3xl font-extrabold text-ink sm:text-4xl">
+    <div class="max-w-2xl">
+      <p class="text-xs font-semibold tracking-[0.3em] text-muted">
+        GET IN TOUCH
+      </p>
+      <h2 class="mt-4 text-3xl font-extrabold text-ink sm:text-4xl lg:text-5xl">
         {heading}
       </h2>
-      <p class="mt-3 text-base text-muted">
-        {subheading}
-      </p>
+      <p class="mt-4 text-base text-muted sm:text-lg">{subheading}</p>
     </div>
 
-    <div class="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
+    <div class="w-full lg:w-auto lg:min-w-[22rem]">
       <a
-        href={`mailto:${EMAIL}`}
-        class="inline-flex items-center rounded-lg bg-accent px-6 py-3.5 text-sm font-semibold text-dark transition-transform hover:scale-105"
+        href={BOOKING_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex w-full items-center justify-center gap-2.5 rounded-lg bg-accent px-7 py-4 text-base font-semibold text-dark transition-transform hover:scale-[1.03]"
       >
-        <div class="min-w-[80px]">{cta}</div>
         <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
+          width="18"
+          height="18"
+          viewBox="0 0 20 20"
           fill="none"
           aria-hidden="true"
         >
           <path
-            d="M3.5 8h9m0 0L8.5 4m4 4-4 4"
+            d="M5 3v2m10-2v2M3.5 8h13M5 5h10a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 15 17H5a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 5 5Z"
             stroke="currentColor"
             stroke-width="1.5"
             stroke-linecap="round"
             stroke-linejoin="round"></path>
         </svg>
+        {cta}
       </a>
 
-      <div class="flex items-center gap-3">
+      <div class="mt-5 flex items-center justify-center gap-3">
         {
           socials.map((social) => (
             <a
@@ -100,7 +103,7 @@ const socials = [
     </div>
   </div>
 
-  <p class="mx-auto mt-10 max-w-7xl px-6 text-xs text-muted lg:px-10">
+  <p class="mx-auto mt-14 max-w-7xl px-6 text-xs text-muted lg:px-10">
     © {new Date().getFullYear()} Louis Iaeger. All rights reserved.
   </p>
 </section>
