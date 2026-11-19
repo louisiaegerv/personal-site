@@ -1,0 +1,81 @@
+---
+import type { Project } from "../data/projects";
+import ProjectHero from "./ProjectHero.astro";
+
+interface Props {
+  project: Project;
+  /** Hides the longer summary, for tighter grids such as the home page. */
+  compact?: boolean;
+}
+
+const { project, compact = false } = Astro.props;
+const highlights = project.stack.flatMap((g) => g.items).slice(0, 4);
+const isLive = project.status === "Live";
+---
+
+<a
+  href={`/projects/${project.slug}`}
+  data-reveal
+  class="group flex flex-col overflow-hidden rounded-2xl border border-dark-border bg-dark-card transition-colors hover:border-accent/60"
+>
+  <div class="overflow-hidden">
+    <div class="transition-transform duration-500 ease-out group-hover:scale-[1.03]">
+      <ProjectHero project={project} />
+    </div>
+  </div>
+
+  <div class="flex flex-1 flex-col p-6 lg:p-7">
+    <div class="flex items-center justify-between gap-3">
+      <p class="text-xs font-semibold tracking-[0.2em] text-white/50 uppercase">
+        {project.category}
+      </p>
+      <span
+        class:list={[
+          "shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold",
+          isLive
+            ? "bg-accent/15 text-accent"
+            : "border border-white/15 text-white/60",
+        ]}
+      >
+        {project.status}
+      </span>
+    </div>
+
+    <h2 class="mt-3 text-2xl font-extrabold text-white lg:text-3xl">
+      {project.name}
+    </h2>
+    <p class="mt-2 text-base font-medium text-white/85">{project.tagline}</p>
+    {!compact && <p class="mt-3 text-sm text-white/60">{project.summary}</p>}
+
+    <ul class="mt-5 flex flex-wrap gap-2">
+      {
+        highlights.map((item) => (
+          <li class="rounded-md bg-white/5 px-2.5 py-1 text-xs text-white/70">
+            {item}
+          </li>
+        ))
+      }
+    </ul>
+
+    <span
+      class="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm font-semibold text-accent"
+    >
+      Read the case study
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 16 16"
+        fill="none"
+        aria-hidden="true"
+        class="transition-transform group-hover:translate-x-1"
+      >
+        <path
+          d="M3.5 8h9m0 0L8.5 4m4 4-4 4"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </span>
+  </div>
+</a>

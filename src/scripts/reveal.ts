@@ -26,9 +26,14 @@ export function revealNow(selector: string, stagger = 0.1) {
     .forEach((el, i) => show(el, i * stagger));
 }
 
-/** Animate each matching element in the first time it scrolls into view. */
-export function revealOnScroll(selector: string, stagger = 0.08) {
+/**
+ * Animate each matching element in the first time it scrolls into view.
+ * `cycle` wraps the stagger so long lists don't accumulate a large delay.
+ */
+export function revealOnScroll(selector: string, stagger = 0.08, cycle = Infinity) {
   document.querySelectorAll<HTMLElement>(selector).forEach((el, i) => {
-    inView(el, () => show(el, i * stagger), { margin: "0px 0px -10% 0px" });
+    inView(el, () => show(el, (i % cycle) * stagger), {
+      margin: "0px 0px -10% 0px",
+    });
   });
 }

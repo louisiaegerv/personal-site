@@ -1,0 +1,111 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Navbar from "../../components/Navbar.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import Contact from "../../components/Contact.astro";
+import { projects } from "../../data/projects";
+
+const principles = [
+  {
+    title: "I design and direct",
+    body: "I decide what gets built and why: the problem, the user, the architecture, the tradeoffs and the cost model.",
+  },
+  {
+    title: "AI is my pair programmer",
+    body: "Most of the code is written with AI in the loop, which lets one person ship a full-stack product in days instead of quarters.",
+  },
+  {
+    title: "I test and review",
+    body: "Every change gets a human read and a real run. Where a model makes decisions, I measure it: evaluation suites, spend caps and audit trails.",
+  },
+];
+---
+
+<Layout
+  title="Projects: AI Automation and Full-Stack Case Studies | Louis Iaeger"
+  description="Case studies of AI products I've designed and shipped: a voice intake agent with a calibrated judge, a print-studio SaaS, a creative-AI library, a prospecting engine and more."
+>
+  <Navbar />
+  <main>
+    <section class="relative overflow-hidden bg-dark pb-16 pt-20 lg:pb-20 lg:pt-28">
+      <div
+        class="pointer-events-none absolute inset-0 -z-0 bg-[radial-gradient(ellipse_60%_75%_at_85%_0%,rgba(203,255,192,0.25),transparent_100%)]"
+      >
+      </div>
+      <div class="relative mx-auto max-w-7xl px-6 lg:px-10">
+        <p
+          data-reveal
+          class="text-xs font-semibold tracking-[0.3em] text-white/50"
+        >
+          SELECTED WORK
+        </p>
+        <h1
+          data-reveal
+          class="mt-4 max-w-4xl text-4xl font-extrabold leading-[1.1] sm:text-5xl lg:text-6xl"
+        >
+          AI products that solve a <span class="text-accent">real problem</span>,
+          end to end.
+        </h1>
+        <p
+          data-reveal
+          class="mt-6 max-w-3xl text-base text-white/70 sm:text-lg lg:text-xl"
+        >
+          Six projects, each built end to end. For every one you'll find the
+          problem, what I built, how it performs, the decisions behind it and
+          screenshots of the product.
+        </p>
+      </div>
+    </section>
+
+    <section class="bg-dark pb-20 lg:pb-28">
+      <div
+        class="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-6 lg:grid-cols-2 lg:gap-8 lg:px-10"
+      >
+        {projects.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </section>
+
+    <section class="bg-light py-20 lg:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-10">
+        <div data-reveal>
+          <p class="text-xs font-semibold tracking-[0.3em] text-muted">
+            HOW I WORK
+          </p>
+          <h2
+            class="mt-4 max-w-3xl text-3xl font-extrabold text-ink sm:text-4xl"
+          >
+            Designer, director and reviewer. With AI writing the code.
+          </h2>
+        </div>
+        <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+          {
+            principles.map((p, i) => (
+              <div
+                data-reveal
+                class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-black/5"
+              >
+                <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-accent/25 text-lg font-extrabold text-ink">
+                  {i + 1}
+                </span>
+                <h3 class="mt-5 text-xl font-bold text-ink">{p.title}</h3>
+                <p class="mt-3 text-sm text-muted">{p.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Contact
+    heading="Building something with AI? Let's talk."
+    subheading="I'm open to AI automation engineering and architecture roles, and to client projects."
+    cta="Get in touch"
+  />
+</Layout>
+
+<script>
+  import { revealNow, revealOnScroll } from "../../scripts/reveal";
+  revealNow("main section:first-of-type [data-reveal]");
+  revealOnScroll("main section:not(:first-of-type) [data-reveal]", 0.08, 2);
+</script>

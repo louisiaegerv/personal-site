@@ -1,0 +1,45 @@
+---
+import { Image } from "astro:assets";
+import type { Project } from "../data/projects";
+
+interface Props {
+  project: Project;
+  /** "card" for list thumbnails, "page" for the case study header. */
+  size?: "card" | "page";
+  loading?: "eager" | "lazy";
+}
+
+const { project, size = "card", loading = "lazy" } = Astro.props;
+const widths = size === "page" ? [800, 1200, 1600] : [480, 720, 960];
+const sizes =
+  size === "page"
+    ? "(min-width: 1280px) 72rem, 100vw"
+    : "(min-width: 1024px) 36rem, 100vw";
+---
+
+{
+  project.hero ? (
+    <Image
+      src={project.hero}
+      alt={project.heroAlt}
+      widths={widths}
+      sizes={sizes}
+      loading={loading}
+      class="aspect-video h-full w-full object-cover"
+    />
+  ) : (
+    <div
+      role="img"
+      aria-label={`Placeholder for the ${project.name} hero image`}
+      class="relative flex aspect-video h-full w-full flex-col items-center justify-center overflow-hidden bg-dark-card"
+      style={`background-image: radial-gradient(circle at 30% 25%, ${project.accent}55, transparent 55%), radial-gradient(circle at 80% 85%, ${project.accent}33, transparent 50%);`}
+    >
+      <span class="text-5xl font-extrabold tracking-tight text-white sm:text-6xl">
+        {project.name}
+      </span>
+      <span class="mt-3 rounded-full border border-white/20 px-3 py-1 text-xs font-semibold tracking-[0.2em] text-white/60">
+        HERO IMAGE COMING SOON
+      </span>
+    </div>
+  )
+}

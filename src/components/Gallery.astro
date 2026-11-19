@@ -1,0 +1,154 @@
+---
+import { Image, getImage } from "astro:assets";
+import type { GalleryItem } from "../data/projects";
+
+interface Props {
+  items: GalleryItem[];
+}
+
+const { items } = Astro.props;
+
+const full = await Promise.all(
+  items.map((item) =>
+    getImage({ src: item.image, width: 1800, format: "webp" }),
+  ),
+);
+const single = items.length === 1;
+---
+
+<div
+  class:list={[
+    single ? "mx-auto max-w-4xl" : "columns-1 gap-5 sm:columns-2 [&>*]:mb-5",
+  ]}
+>
+  {
+    items.map((item, i) => (
+      <figure class="break-inside-avoid" data-reveal>
+        <button
+          type="button"
+          data-gallery-item
+          data-index={i}
+          data-full={full[i].src}
+          data-alt={item.alt}
+          data-caption={item.caption}
+          class="group block w-full cursor-zoom-in overflow-hidden rounded-xl border border-dark-border bg-dark-card text-left transition-colors hover:border-accent/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          aria-label={`Enlarge: ${item.caption}`}
+        >
+          <Image
+            src={item.image}
+            alt={item.alt}
+            widths={[480, 720, 960]}
+            sizes={single ? "56rem" : "(min-width: 640px) 34rem, 100vw"}
+            loading="lazy"
+            class="h-auto w-full transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+          />
+        </button>
+        <figcaption class="mt-2.5 px-1 text-sm text-white/60">
+          {item.caption}
+        </figcaption>
+      </figure>
+    ))
+  }
+</div>
+
+<dialog
+  id="lightbox"
+  aria-label="Image viewer"
+  class="m-0 h-full max-h-none w-full max-w-none bg-transparent p-0 backdrop:bg-black/90"
+>
+  <div class="flex h-full w-full flex-col items-center justify-center gap-4 p-4 sm:p-8">
+    <button
+      type="button"
+      id="lb-close"
+      aria-label="Close"
+      class="absolute right-4 top-4 z-10 rounded-full bg-white/10 p-3 text-white transition-colors hover:bg-white/20"
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+      </svg>
+    </button>
+
+    {
+      items.length > 1 && (
+        <>
+          <button
+            type="button"
+            id="lb-prev"
+            aria-label="Previous image"
+            class="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white transition-colors hover:bg-white/20 sm:left-5"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            id="lb-next"
+            aria-label="Next image"
+            class="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white transition-colors hover:bg-white/20 sm:right-5"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </>
+      )
+    }
+
+    <img
+      id="lb-img"
+      src=""
+      alt=""
+      class="max-h-[78vh] max-w-full rounded-lg object-contain shadow-2xl"
+    />
+    <p id="lb-caption" class="max-w-3xl text-center text-sm text-white/80"></p>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.getElementById("lightbox") as HTMLDialogElement | null;
+  const img = document.getElementById("lb-img") as HTMLImageElement | null;
+  const caption = document.getElementById("lb-caption");
+  const buttons = Array.from(
+    document.querySelectorAll<HTMLButtonElement>("[data-gallery-item]"),
+  );
+  let current = 0;
+  let opener: HTMLElement | null = null;
+
+  function show(index: number) {
+    if (!img || !caption || buttons.length === 0) return;
+    current = (index + buttons.length) % buttons.length;
+    const b = buttons[current];
+    img.src = b.dataset.full ?? "";
+    img.alt = b.dataset.alt ?? "";
+    caption.textContent = `${b.dataset.caption ?? ""}  (${current + 1} / ${buttons.length})`;
+  }
+
+  buttons.forEach((b, i) =>
+    b.addEventListener("click", () => {
+      opener = b;
+      show(i);
+      dialog?.showModal();
+      document.body.classList.add("overflow-hidden");
+    }),
+  );
+
+  dialog?.addEventListener("close", () => {
+    document.body.classList.remove("overflow-hidden");
+    opener?.focus();
+  });
+  document.getElementById("lb-close")?.addEventListener("click", () => dialog?.close());
+  document.getElementById("lb-prev")?.addEventListener("click", () => show(current - 1));
+  document.getElementById("lb-next")?.addEventListener("click", () => show(current + 1));
+
+  // Click on the dark backdrop (not the image or buttons) closes the viewer.
+  dialog?.addEventListener("click", (e) => {
+    const t = e.target as HTMLElement;
+    if (t === dialog || t.parentElement === dialog) dialog.close();
+  });
+
+  dialog?.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") show(current - 1);
+    if (e.key === "ArrowRight") show(current + 1);
+  });
+</script>

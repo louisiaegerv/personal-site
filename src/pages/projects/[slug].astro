@@ -1,0 +1,445 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Navbar from "../../components/Navbar.astro";
+import Contact from "../../components/Contact.astro";
+import Gallery from "../../components/Gallery.astro";
+import ProjectHero from "../../components/ProjectHero.astro";
+import { projects, type Project } from "../../data/projects";
+
+export function getStaticPaths() {
+  return projects.map((project, i) => ({
+    params: { slug: project.slug },
+    props: {
+      project,
+      next: projects[(i + 1) % projects.length],
+    },
+  }));
+}
+
+interface Props {
+  project: Project;
+  next: Project;
+}
+
+const { project, next } = Astro.props;
+const isLive = project.status === "Live";
+
+const starBlocks = [
+  { letter: "S", label: "Situation", text: project.star.situation },
+  { letter: "T", label: "Task", text: project.star.task },
+];
+---
+
+<Layout
+  title={`${project.name} Case Study | Louis Iaeger`}
+  description={`${project.tagline} ${project.summary}`}
+>
+  <Navbar />
+  <main id="project-page">
+    <!-- Header -->
+    <section class="relative overflow-hidden bg-dark pb-10 pt-12 lg:pt-16">
+      <div
+        class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_75%_at_85%_0%,rgba(203,255,192,0.25),transparent_100%)]"
+      >
+      </div>
+      <div class="relative mx-auto max-w-7xl px-6 lg:px-10">
+        <a
+          href="/projects"
+          data-reveal
+          class="inline-flex items-center gap-1.5 text-sm font-medium text-white/60 transition-colors hover:text-accent"
+        >
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M12.5 8h-9m0 0 4-4m-4 4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          All projects
+        </a>
+
+        <div class="mt-8 flex flex-wrap items-center gap-3" data-reveal>
+          <p class="text-xs font-semibold tracking-[0.25em] text-white/50 uppercase">
+            {project.category}
+          </p>
+          <span
+            class:list={[
+              "rounded-full px-2.5 py-1 text-[11px] font-semibold",
+              isLive
+                ? "bg-accent/15 text-accent"
+                : "border border-white/15 text-white/60",
+            ]}
+          >
+            {project.status}
+          </span>
+        </div>
+
+        <h1
+          data-reveal
+          class="mt-4 text-5xl font-extrabold leading-[1.05] sm:text-6xl lg:text-7xl"
+        >
+          {project.name}
+        </h1>
+        <p
+          data-reveal
+          class="mt-5 max-w-3xl text-xl font-medium text-white/85 lg:text-2xl"
+        >
+          {project.tagline}
+        </p>
+
+        <div data-reveal class="mt-8 flex flex-wrap items-center gap-3">
+          {
+            project.links.live && (
+              <a
+                href={project.links.live.url}
+                target="_blank"
+                rel="noreferrer"
+                class="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-dark transition-transform hover:scale-105"
+              >
+                Visit {project.links.live.label}
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M5 11l6-6m0 0H6m5 0v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </a>
+            )
+          }
+          {
+            project.links.repo && !project.links.repo.isPrivate && (
+              <a
+                href={project.links.repo.url}
+                target="_blank"
+                rel="noreferrer"
+                class="inline-flex items-center gap-2 rounded-lg border border-white/25 px-5 py-3 text-sm font-semibold text-white transition-colors hover:border-accent hover:text-accent"
+              >
+                View code on GitHub
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M5 11l6-6m0 0H6m5 0v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </a>
+            )
+          }
+          {
+            project.links.repo?.isPrivate && (
+              <span class="inline-flex items-center gap-2 rounded-lg border border-dashed border-white/25 px-5 py-3 text-sm font-medium text-white/60">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M4.5 7V5.5a3.5 3.5 0 1 1 7 0V7M3.5 7h9v6.5h-9V7Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Private repository. Code walkthrough on request.
+              </span>
+            )
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Hero image + metrics -->
+    <section class="bg-dark pb-16 lg:pb-20">
+      <div class="mx-auto max-w-7xl px-6 lg:px-10">
+        <div
+          data-reveal
+          class="overflow-hidden rounded-2xl border border-dark-border bg-dark-card shadow-2xl shadow-black/40"
+        >
+          <ProjectHero project={project} size="page" loading="eager" />
+        </div>
+
+        <div
+          class="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4"
+        >
+          {
+            project.metrics.map((m) => (
+              <div
+                data-reveal
+                class="rounded-2xl border border-dark-border bg-dark-card px-5 py-6 text-center"
+              >
+                <p class="text-2xl font-extrabold text-accent sm:text-3xl lg:text-4xl">
+                  {m.value}
+                </p>
+                <p class="mt-2 text-xs font-medium text-white/65 sm:text-sm">
+                  {m.label}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="mt-14 grid grid-cols-1 gap-10 lg:grid-cols-[1.6fr_1fr] lg:gap-16">
+          <div data-reveal>
+            <p class="text-xs font-semibold tracking-[0.3em] text-white/50">
+              OVERVIEW
+            </p>
+            <p class="mt-4 text-lg text-white/80 lg:text-xl">
+              {project.summary}
+            </p>
+          </div>
+          <dl
+            data-reveal
+            class="space-y-4 rounded-2xl border border-dark-border bg-dark-card p-6 text-sm"
+          >
+            <div>
+              <dt class="text-xs font-semibold tracking-[0.2em] text-white/40">ROLE</dt>
+              <dd class="mt-1 text-white/80">{project.role}</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-semibold tracking-[0.2em] text-white/40">YEAR</dt>
+              <dd class="mt-1 text-white/80">{project.year}</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-semibold tracking-[0.2em] text-white/40">STATUS</dt>
+              <dd class="mt-1 text-white/80">{project.status}</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAR case study -->
+    <section class="bg-light py-20 lg:py-28">
+      <div class="mx-auto max-w-7xl px-6 lg:px-10">
+        <div data-reveal>
+          <p class="text-xs font-semibold tracking-[0.3em] text-muted">
+            THE CASE STUDY
+          </p>
+          <h2 class="mt-4 text-3xl font-extrabold text-ink sm:text-4xl lg:text-5xl">
+            The problem, the build, the result.
+          </h2>
+        </div>
+
+        <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
+          {
+            starBlocks.map((b) => (
+              <div
+                data-reveal
+                class="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-black/5"
+              >
+                <div class="flex items-center gap-3">
+                  <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-lg font-extrabold text-dark">
+                    {b.letter}
+                  </span>
+                  <h3 class="text-xl font-bold text-ink">{b.label}</h3>
+                </div>
+                <p class="mt-4 text-base text-muted">{b.text}</p>
+              </div>
+            ))
+          }
+        </div>
+
+        <div
+          data-reveal
+          class="mt-6 rounded-2xl bg-white p-8 shadow-sm ring-1 ring-black/5 lg:p-10"
+        >
+          <div class="flex items-center gap-3">
+            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-lg font-extrabold text-dark">
+              A
+            </span>
+            <h3 class="text-xl font-bold text-ink">Action: what I built</h3>
+          </div>
+          <ol class="mt-6 space-y-4">
+            {
+              project.star.action.map((item, i) => (
+                <li class="flex gap-4">
+                  <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-ink text-xs font-bold text-white">
+                    {i + 1}
+                  </span>
+                  <p class="text-base text-muted">{item}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <div
+          data-reveal
+          class="mt-6 rounded-2xl bg-dark p-8 lg:p-10"
+        >
+          <div class="flex items-center gap-3">
+            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-lg font-extrabold text-dark">
+              R
+            </span>
+            <h3 class="text-xl font-bold text-white">Result</h3>
+          </div>
+          <ul class="mt-6 space-y-4">
+            {
+              project.star.result.map((item) => (
+                <li class="flex gap-3">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    aria-hidden="true"
+                    class="mt-0.5 shrink-0 text-accent"
+                  >
+                    <path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <p class="text-base text-white/80">{item}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works + decisions -->
+    <section class="bg-dark py-20 lg:py-28">
+      <div class="mx-auto max-w-7xl px-6 lg:px-10">
+        <div data-reveal>
+          <p class="text-xs font-semibold tracking-[0.3em] text-white/50">
+            UNDER THE HOOD
+          </p>
+          <h2 class="mt-4 text-3xl font-extrabold sm:text-4xl lg:text-5xl">
+            {project.flow.title}
+          </h2>
+        </div>
+
+        <ol class="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {
+            project.flow.steps.map((step, i) => (
+              <li
+                data-reveal
+                class="relative rounded-2xl border border-dark-border bg-dark-card p-6"
+              >
+                <span class="text-sm font-extrabold text-accent">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 class="mt-2 text-lg font-bold text-white">{step.title}</h3>
+                <p class="mt-2 text-sm text-white/65">{step.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+
+        <h3 data-reveal class="mt-20 text-2xl font-extrabold sm:text-3xl">
+          Key decisions
+        </h3>
+        <div class="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+          {
+            project.decisions.map((d) => (
+              <div
+                data-reveal
+                class="rounded-2xl border border-dark-border bg-dark-card p-6 lg:p-7"
+              >
+                <h4 class="text-lg font-bold text-white">{d.title}</h4>
+                <p class="mt-2 text-sm text-white/65">{d.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    {
+      project.gallery.length > 0 && (
+        <section class="bg-dark pb-20 lg:pb-28">
+          <div class="mx-auto max-w-7xl px-6 lg:px-10">
+            <div data-reveal>
+              <p class="text-xs font-semibold tracking-[0.3em] text-white/50">
+                IN PICTURES
+              </p>
+              <h2 class="mt-4 text-3xl font-extrabold sm:text-4xl lg:text-5xl">
+                See it in action.
+              </h2>
+              <p class="mt-3 text-sm text-white/50">Click any image to enlarge.</p>
+            </div>
+            <div class="mt-10">
+              <Gallery items={project.gallery} />
+            </div>
+            {project.galleryNote && (
+              <p class="mt-6 text-xs text-white/40">{project.galleryNote}</p>
+            )}
+          </div>
+        </section>
+      )
+    }
+    {
+      project.gallery.length === 0 && project.galleryNote && (
+        <section class="bg-dark pb-20">
+          <div class="mx-auto max-w-7xl px-6 lg:px-10">
+            <div class="rounded-2xl border border-dashed border-dark-border p-10 text-center text-sm text-white/50">
+              {project.galleryNote}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Stack + limits -->
+    <section class="bg-light py-20 lg:py-28">
+      <div class="mx-auto grid max-w-7xl grid-cols-1 gap-14 px-6 lg:grid-cols-2 lg:gap-16 lg:px-10">
+        <div data-reveal>
+          <p class="text-xs font-semibold tracking-[0.3em] text-muted">TECH STACK</p>
+          <h2 class="mt-4 text-3xl font-extrabold text-ink sm:text-4xl">
+            What it's built with
+          </h2>
+          <div class="mt-8 space-y-5">
+            {
+              project.stack.map((g) => (
+                <div>
+                  <p class="text-xs font-semibold tracking-[0.2em] text-muted uppercase">
+                    {g.group}
+                  </p>
+                  <ul class="mt-2 flex flex-wrap gap-2">
+                    {g.items.map((item) => (
+                      <li class="rounded-lg bg-white px-3 py-1.5 text-sm font-medium text-ink shadow-sm ring-1 ring-black/5">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+
+        <div data-reveal>
+          <p class="text-xs font-semibold tracking-[0.3em] text-muted">HONEST NOTES</p>
+          <h2 class="mt-4 text-3xl font-extrabold text-ink sm:text-4xl">
+            {project.limits.title}
+          </h2>
+          <ul class="mt-8 space-y-4">
+            {
+              project.limits.items.map((item) => (
+                <li class="flex gap-3">
+                  <span class="mt-2 h-2 w-2 shrink-0 rounded-full bg-accent-dark"></span>
+                  <p class="text-base text-muted">{item}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Next project -->
+    <section class="bg-dark py-16">
+      <div class="mx-auto max-w-7xl px-6 lg:px-10">
+        <a
+          href={`/projects/${next.slug}`}
+          data-reveal
+          class="group flex flex-col items-start justify-between gap-4 rounded-2xl border border-dark-border bg-dark-card p-8 transition-colors hover:border-accent/60 sm:flex-row sm:items-center"
+        >
+          <div>
+            <p class="text-xs font-semibold tracking-[0.3em] text-white/50">NEXT PROJECT</p>
+            <p class="mt-2 text-2xl font-extrabold text-white sm:text-3xl">{next.name}</p>
+            <p class="mt-1 text-sm text-white/60">{next.tagline}</p>
+          </div>
+          <span class="inline-flex items-center gap-2 text-sm font-semibold text-accent">
+            Read the case study
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" class="transition-transform group-hover:translate-x-1">
+              <path d="M3.5 8h9m0 0L8.5 4m4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <Contact
+    heading="Want something like this for your business?"
+    subheading="I design and build AI automation that solves a measurable problem. Let's talk about yours."
+    cta="Get in touch"
+  />
+</Layout>
+
+<script>
+  import { revealNow, revealOnScroll } from "../../scripts/reveal";
+  revealNow("#project-page section:first-of-type [data-reveal]");
+  revealOnScroll("#project-page section:not(:first-of-type) [data-reveal]", 0.08, 3);
+</script>
